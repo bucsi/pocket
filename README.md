@@ -1,7 +1,7 @@
-# gocketbase
+# pocket
 
 [![Package Version](https://img.shields.io/hexpm/v/pocket)](https://hex.pm/packages/pocket)
-[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/gocketbase/)  
+[![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/pocket/)  
 ![target=javascript](https://img.shields.io/badge/target-javascript-F7DF1E)
 
 ```sh
