@@ -1,7 +1,5 @@
-import gleam/javascript/promise.{type Promise}
-
 import pocket/internal/ffi/pocketbase
-import pocket/types.{type Collection, type DecodeResult, type PocketBase}
+import pocket/types.{type Collection, type PocketBase}
 
 // A simple function to create a PocketBase instance and log something
 pub fn new(base_url: String) -> PocketBase {
