@@ -4,6 +4,7 @@ import PocketBase from "pocketbase";
  * @typedef {import("pocketbase").default} PocketBase
  * @typedef {ReturnType<import("pocketbase").default["collection"]>} PbCollection
  * @typedef {ReturnType<PbCollection["listAuthMethods"]>} PbListAuthMethods
+ * @typedef {ReturnType<PbCollection["getOne"]>} PbGetOne
  */
 
 /**
@@ -25,4 +26,21 @@ export const pb_collection = (pb, idOrName) => pb.collection(idOrName)
  */
 export async function pb_list_auth_methods(collection) {
   return await collection.listAuthMethods();
+}
+
+/**
+ * @param {PbCollection} collection
+ * @param {string} id
+ * @returns {PbGetOne}
+ */
+export async function pb_get_one(collection, id) {
+  return await collection.getOne(id);
+}
+
+/**
+ * @param {PbCollection} collection
+ * @returns {PbGetOne}
+ */
+export async function pb_get_full_list(collection) {
+  return await collection.getFullList();
 }

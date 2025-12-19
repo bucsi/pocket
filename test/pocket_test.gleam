@@ -1,3 +1,4 @@
+import gleam/dynamic/decode
 import gleam/javascript/promise
 import gleeunit
 
@@ -21,4 +22,40 @@ pub fn list_auth_methods_real_test() {
         password: auth.Password(enabled: True, identity_fields: ["email"]),
       ))
   })
+}
+
+pub fn get_real_test() {
+  let first =
+    pocket.new("https://pocketbase.io")
+    |> pocket.collection("posts")
+    |> pocket.get_full_list(post_for_get_test_decoder())
+    |> promise.map(fn(x) {
+      let assert Ok([first, ..]) = x
+      first
+    })
+
+  let item = {
+    use first <- promise.await(first)
+    pocket.new("https://pocketbase.io")
+    |> pocket.collection("posts")
+    |> pocket.get_one(first.id, post_for_get_test_decoder())
+    |> promise.map(fn(x) {
+      let assert Ok(item) = x
+      item
+    })
+  }
+
+  use first <- promise.map(first)
+  use item <- promise.map(item)
+  assert first == item
+}
+
+type PostForGetTest {
+  PostForGetTest(id: String, title: String)
+}
+
+fn post_for_get_test_decoder() -> decode.Decoder(PostForGetTest) {
+  use id <- decode.field("id", decode.string)
+  use title <- decode.field("title", decode.string)
+  decode.success(PostForGetTest(id:, title:))
 }
