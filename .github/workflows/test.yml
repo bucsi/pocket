@@ -23,4 +23,17 @@ jobs:
       - run: npm install
       - run: gleam deps download
       - run: gleam test
+      - name: check for warnings
+        shell: python
+        run: |
+          import subprocess, sys, pathlib
+          p = subprocess.run(["gleam", "test"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+          out = p.stdout or ""
+          if "warning" in out:
+            print("Gleam test produced warnings:", file=sys.stderr)
+            lines = out.splitlines()
+            for i, line in enumerate(lines, 1):
+              if "warning" in line.lower():
+                print("\n".join(lines[i : i+7]))
+            sys.exit(1)
       - run: gleam format --check src test
