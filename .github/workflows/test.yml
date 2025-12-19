@@ -17,7 +17,10 @@ jobs:
           otp-version: "28"
           gleam-version: "1.13.0"
           rebar3-version: "3"
-          # elixir-version: "1"
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '25'
+      - run: npm install
       - run: gleam deps download
       - run: gleam test
       - run: gleam format --check src test
