@@ -4,17 +4,22 @@ import gleam/javascript/promise.{type Promise}
 import pocket/internal/ffi/pocketbase
 import pocket/types.{type Collection, type PocketBase}
 
-// A simple function to create a PocketBase instance and log something
+/// Creates a new PocketBase client.
 pub fn new(base_url: String) -> PocketBase {
   pocketbase.new(base_url)
 }
 
-// A simple function to get a collection from PocketBase
-pub fn collection(pb: PocketBase, id_or_name: String) -> Collection {
-  pocketbase.collection(pb, id_or_name)
+/// Gets a collection reference by name.
+pub fn collection(pb: PocketBase, name: String) -> Collection {
+  pocketbase.collection(pb, name)
 }
 
-// Get one record from a collection with decoding
+/// Calls [getOne](https://pocketbase.io/docs/api-records/#view-record) and decodes the result using the provided decoder.
+/// ```gleam
+/// pocket.new("https://pocketbase.io")
+///    |> pocket.collection("posts")
+///    |> pocket.get_one(post_decoder())
+/// ```
 pub fn get_one(
   from collection: Collection,
   id id: String,
@@ -25,6 +30,12 @@ pub fn get_one(
   |> promise.map(decode.run(_, decoder))
 }
 
+/// Calls [getFullList](https://pocketbase.io/docs/api-records/#listsearch-records:~:text=.getFullList) and decodes results using the provided decoder.
+/// ```gleam
+/// pocket.new("https://pocketbase.io")
+///    |> pocket.collection("posts")
+///    |> pocket.get_full_list(post_decoder())
+/// ```
 pub fn get_full_list(
   from collection: Collection,
   using decoder: decode.Decoder(t),
