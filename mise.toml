@@ -1,0 +1,4 @@
+[tools]
+node = "latest"
+gleam = "1.13.0"
+bun = "latest"

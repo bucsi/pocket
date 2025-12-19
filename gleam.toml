@@ -1,0 +1,18 @@
+name = "pocket"
+version = "1.0.0"
+target = "javascript"
+
+description = "Bindings for the PocketBase JavaScript SDK"
+licences = ["MIT"]
+repository = { type = "github", user = "bucsi", repo = "pocket" }
+# links = [{ title = "Website", href = "" }]
+#
+# For a full reference of all the available options, you can have a look at
+# https://gleam.run/writing-gleam/gleam-toml/.
+
+[dependencies]
+gleam_stdlib = ">= 0.44.0 and < 2.0.0"
+gleam_javascript = ">= 1.0.0 and < 2.0.0"
+
+[dev-dependencies]
+gleeunit = ">= 1.0.0 and < 2.0.0"
