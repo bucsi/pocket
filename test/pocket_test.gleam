@@ -1,13 +1,13 @@
 import gleam/dynamic/decode
 import gleam/javascript/promise
 import gleam/json
+import gleam/option
 import gleeunit
 
 import glanoid
 
 import pocket
 import pocket/auth
-import pocket/types
 
 pub fn main() -> Nil {
   gleeunit.main()
@@ -65,23 +65,35 @@ fn post_for_get_test_decoder() -> decode.Decoder(PostForGetTest) {
 }
 
 pub fn auth_real_test() {
-  assert 1 + 1 == 2 as "flaky test for now"
-  // let pb = pocket.new("https://pocketbase.io")
+  let pb = pocket.new("https://pocketbase.io")
 
-  // let info = auth.get_info(pb)
-  // assert info.is_valid == False
-  // assert info.record_id == option.None
+  let info = auth.get_info(pb)
+  assert info.is_valid == False
+  assert info.record_id == option.None
 
-  // let login_promise =
-  //   pb
-  //   |> pocket.collection("users")
-  //   |> auth.with_password("test@example.com", "12345678")
+  let #(user_id, payload) = create_new_user_payload()
 
-  // use _ <- promise.map(login_promise)
+  let user_created_promise =
+    pb
+    |> pocket.collection("users")
+    |> pocket.create(payload, {
+      use record_id <- decode.field("id", decode.string)
+      decode.success(record_id)
+    })
 
-  // let info = auth.get_info(pb)
-  // assert info.is_valid == True
-  // assert info.record_id == option.Some("eP2jCr1h3NGtsbz")
+  use user_created <- promise.await(user_created_promise)
+  let assert Ok(user_record_id) = user_created
+
+  let login_promise =
+    pb
+    |> pocket.collection("users")
+    |> auth.with_password(user_id <> "@example.com", user_id)
+
+  use _ <- promise.map(login_promise)
+
+  let info = auth.get_info(pb)
+  assert info.is_valid == True
+  assert info.record_id == option.Some(user_record_id)
 }
 
 pub fn create_user_real_test() {
