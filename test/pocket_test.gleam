@@ -102,7 +102,7 @@ pub fn create_user_real_test() {
   |> pocket.collection("users")
   |> pocket.create(data, user_decoder())
   |> promise.map(fn(result) {
-    let assert Ok(user) = result |> echo
+    let assert Ok(user) = result
 
     assert user
       == User(
