@@ -1,5 +1,6 @@
 import gleam/dynamic/decode
 import gleam/javascript/promise.{type Promise}
+import gleam/json
 
 import pocket/internal/ffi/pocketbase
 import pocket/types.{type Collection, type PocketBase}
@@ -43,4 +44,20 @@ pub fn get_full_list(
   collection
   |> pocketbase.get_full_list()
   |> promise.map(decode.run(_, decode.list(decoder)))
+}
+
+/// Calls [create](https://pocketbase.io/docs/api-records/#create-record).
+/// ```gleam
+/// pocket.new("https://pocketbase.io")
+///    |> pocket.collection("posts")
+///    |> pocket.create(post |> post_to_json, posts_decoder())
+/// ```
+pub fn create(
+  in collection: Collection,
+  encoded_data json: json.Json,
+  using decoder: decode.Decoder(t),
+) -> Promise(types.DecodeResult(t)) {
+  collection
+  |> pocketbase.create(json)
+  |> promise.map(fn(dynamic) { dynamic |> echo |> decode.run(decoder) })
 }

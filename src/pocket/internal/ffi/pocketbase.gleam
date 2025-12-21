@@ -1,5 +1,6 @@
 import gleam/dynamic.{type Dynamic}
 import gleam/javascript/promise.{type Promise}
+import gleam/json.{type Json}
 
 import pocket/types.{type Collection, type PocketBase}
 
@@ -30,3 +31,6 @@ pub fn get_auth_store(pb: PocketBase) -> Dynamic
 
 @external(javascript, "./pocketbase_ffi.mjs", "pb_get_auth_info")
 pub fn get_auth_info(pb: PocketBase) -> Dynamic
+
+@external(javascript, "./pocketbase_ffi.mjs", "pb_create")
+pub fn create(col: Collection, data: Json) -> Promise(Dynamic)
