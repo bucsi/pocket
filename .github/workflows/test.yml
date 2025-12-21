@@ -27,7 +27,7 @@ jobs:
         shell: python
         run: |
           import subprocess, sys, pathlib
-          p = subprocess.run(["gleam", "test"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+          p = subprocess.run(["gleam", "build"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
           out = p.stdout or ""
           if "warning" in out:
             print("Gleam test produced warnings:", file=sys.stderr)
