@@ -17,3 +17,16 @@ pub fn get_one(col: Collection, id: String) -> Promise(Dynamic)
 
 @external(javascript, "./pocketbase_ffi.mjs", "pb_get_full_list")
 pub fn get_full_list(col: Collection) -> Promise(Dynamic)
+
+@external(javascript, "./pocketbase_ffi.mjs", "pb_auth_with_password")
+pub fn auth_with_password(
+  col: Collection,
+  user: String,
+  pass: String,
+) -> Promise(Dynamic)
+
+@external(javascript, "./pocketbase_ffi.mjs", "pb_get_auth_store")
+pub fn get_auth_store(pb: PocketBase) -> Dynamic
+
+@external(javascript, "./pocketbase_ffi.mjs", "pb_get_auth_info")
+pub fn get_auth_info(pb: PocketBase) -> Dynamic

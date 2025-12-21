@@ -1,5 +1,6 @@
 import gleam/dynamic/decode
 import gleam/javascript/promise
+import gleam/option
 import gleeunit
 
 import pocket
@@ -58,4 +59,23 @@ fn post_for_get_test_decoder() -> decode.Decoder(PostForGetTest) {
   use id <- decode.field("id", decode.string)
   use title <- decode.field("title", decode.string)
   decode.success(PostForGetTest(id:, title:))
+}
+
+pub fn auth_real_test() {
+  let pb = pocket.new("https://pocketbase.io")
+
+  let info = auth.get_info(pb)
+  assert info.is_valid == False
+  assert info.record_id == option.None
+
+  let login_promise =
+    pb
+    |> pocket.collection("users")
+    |> auth.with_password("test@example.com", "12345678")
+
+  use _ <- promise.map(login_promise)
+
+  let info = auth.get_info(pb)
+  assert info.is_valid == True
+  assert info.record_id == option.Some("eP2jCr1h3NGtsbz")
 }

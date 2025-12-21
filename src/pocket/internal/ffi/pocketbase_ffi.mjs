@@ -43,6 +43,28 @@ export async function pb_get_full_list(collection) {
 /**
  * @param {PbCollection} collection
  */
-export async function pb_get_full_list(collection) {
-  return await collection.getFullList();
+export async function pb_auth_with_password(collection, user, pass) {
+  return await collection.authWithPassword(user, pass);
+}
+
+/**
+ * @param {PocketBase} pb
+ */
+export function pb_get_auth_store(pb) {
+  const isValid = pb.authStore.isValid
+  const token = pb.authStore.token
+  const record = pb.authStore.record
+
+  return {isValid, token, record}
+}
+
+/**
+ * @param {PocketBase} pb
+ */
+export function pb_get_auth_info(pb) {
+  const isValid = pb.authStore.isValid
+  const token = pb.authStore.token
+  const recordId = pb.authStore.record?.id
+
+  return {isValid, token, recordId}
 }
