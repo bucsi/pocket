@@ -59,5 +59,5 @@ pub fn create(
 ) -> Promise(types.DecodeResult(t)) {
   collection
   |> pocketbase.create(json)
-  |> promise.map(fn(dynamic) { dynamic |> echo |> decode.run(decoder) })
+  |> promise.map(decode.run(_, decoder))
 }
