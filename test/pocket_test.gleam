@@ -1,7 +1,7 @@
 import gleam/dynamic/decode
 import gleam/javascript/promise
 import gleam/json
-import gleam/option
+import gleam/option.{Some}
 import gleeunit
 
 import glanoid
@@ -166,4 +166,29 @@ fn user_decoder() -> decode.Decoder(User) {
     verified:,
     website:,
   ))
+}
+
+pub fn create_user_error_real_test() {
+  pocket.new("https://pocketbase.io")
+  |> pocket.collection("users")
+  |> pocket.create(json.object([]), user_decoder())
+  |> promise.map(fn(result) {
+    assert result == Error(pocket.ClientResponseError(
+      url: "https://pocketbase.io/api/collections/users/records",
+      status: 400,
+      excuses: [
+        pocket.Excuse(
+          key: "password",
+          message: "Cannot be blank.",
+          code: "validation_required",
+        ),
+        pocket.Excuse(
+          key: "passwordConfirm",
+          message: "Cannot be blank.",
+          code: "validation_required",
+        ),
+      ],
+      is_abort: Some(False),
+    ))
+  })
 }
